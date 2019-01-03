@@ -2,7 +2,6 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import Constants from '../constants/AppConstants'
 
 import api from '../api'
-import App from '../components/App';
 
 
 const NoteActions = {
@@ -13,7 +12,7 @@ const NoteActions = {
 
     api.listNotes()
       .then(({data}) => {
-        App.AppDispatcher.dispatch({
+        AppDispatcher.dispatch({
           type: Constants.LOAD_NOTES_SUCCESS,
           notes: data
         })

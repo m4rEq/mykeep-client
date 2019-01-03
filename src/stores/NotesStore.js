@@ -28,14 +28,17 @@ const TasksStore = Object.assign({}, EventEmitter.prototype, {
     return _notes
   },
 
+  // Произвести изменение с данными, что бы компноненты могли обновиться
   emitChange() {
     this.emit(CHANGE_EVENT)
   },
 
+  // Подписка на событие
   addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback)
   },
 
+  // Отписка от события
   removeChangeListener(callback) {
     this.removeChangeListener(CHANGE_EVENT, callback)
   }
@@ -43,13 +46,15 @@ const TasksStore = Object.assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
   switch(action.type) {
-    case AppConstants.LOAD_NOTES_REQUIEST: {
+    case AppConstants.LOAD_NOTES_REQUEST: {
+      console.log('Load Notes Request')
       _isLoading = true
       TasksStore.emitChange()
       break
     }
 
     case AppConstants.LOAD_NOTES_SUCCESS: {
+      console.log('Load Notes Success')
       _isLoading = false
       _notes = action.notes.map(formatNote)
       _loadingError = null
@@ -58,7 +63,9 @@ AppDispatcher.register(function(action) {
     }
 
     case AppConstants.LOAD_NOTES_FAIL: {
+      console.log('Load Notes fail')
       _loadingError = action.error 
+      console.log(_loadingError)
       TasksStore.emitChange()
       break
     }

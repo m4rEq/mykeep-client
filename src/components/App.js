@@ -19,25 +19,32 @@ class App extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      getStateFromFlux : function () {
-        return getStateFromFlux()
-      }
-    }
+    this.state = getStateFromFlux()
     this.handleNoteAdd = this.handleNoteAdd.bind(this)
+    this.handleNoteDelete = this.handleNoteDelete.bind(this)
     this._onChange = this._onChange.bind(this)
   }
 
+  componentWillMount() {
+    NotesActions.loadNotes()
+  }
+
+  // Подписаться на изменение store
   componentDidMount() {
     NotesStore.addChangeListener(this._onChange)
   }
 
+  // Отписаться от изменения store
   componentWillUnmount() {
     NotesStore.removeChangeListener(this._onChange)
   }
-
+  
   handleNoteAdd(data) {
     NotesActions.createNote(data)
+  }
+
+  handleNoteDelete(note) {
+    NotesActions.deleteNote(note.id)
   }
   
   _onChange() {
@@ -49,7 +56,10 @@ class App extends Component {
       <h2 className="App__header">NotesApp</h2>
       <Note />
       <NoteEditor onNoteAdd={this.handleNoteAdd} /> 
-      <NotesGrid />
+      <NotesGrid 
+        notes={this.state.notes}
+        onNoteDelete={this.handleNoteDelete}
+      />
     </div>
     );
   }
